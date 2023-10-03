@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,27 +20,9 @@ Route::get('/', function () {
 });
 
 Route::prefix('/blog')->name('blog.')->group(function () {
-    Route::get('/', function (Request $request) {
+    Route::get('/', [BlogController::class, 'index'])->name('index');
 
-        $post =  \App\Models\Post::create([
-            'title' => 'Mon nouveau titre',
-            'slug' => 'nouveau-titre-test',
-            'content' => 'Nouveau contenu'
-        ]);
-        dd($post);
-        return $post;
-
-        return [
-            'link' => \route('blog.show', ['slug' => 'article','id' => 13])
-        ];
-    })->name('index');
-
-    Route::get('/{slug}-{id}', function (string $slug, string $id) {
-        return [
-            "slug" => $slug,
-            "id" => $id
-        ];
-    })->where([
+    Route::get('/{slug}-{id}', [BlogController::class, 'show'])->where([
         'id' => '[0-9]*',
         'slug' => '[a-z0-9\-]*'
     ])->name('show');
