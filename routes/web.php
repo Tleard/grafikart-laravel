@@ -22,9 +22,15 @@ Route::get('/', function () {
 Route::prefix('/blog')->name('blog.')->group(function () {
     Route::get('/', [BlogController::class, 'index'])->name('index');
 
-    Route::get('/{slug}-{id}', [BlogController::class, 'show'])->where([
+    /*Route::get('/{slug}-{post}', [BlogController::class, 'show'])->where([
         'id' => '[0-9]*',
         'slug' => '[a-z0-9\-]*'
+    ])->name('show');*/
+
+    Route::get('/new', [BlogController::class, 'create'])->name('create');
+    Route::post('/new', [BlogController::class, 'store']);
+    Route::get('/{post:slug}', [BlogController::class, 'show'])->where([
+        'post' => '[a-z0-9\-]*'
     ])->name('show');
 
 });
